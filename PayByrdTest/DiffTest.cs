@@ -144,6 +144,38 @@ namespace PayByrdTest
             var _diffService = this.services.GetService<IDiffService>();
             _diffService.SaveRight(new paybyrd.Entities.Request.DiffRequest() { Id = 1, JsonValue = "VEVTVEUgREUgUEFMQVZSQQ==" });
         }
+        [Fact]
+        public void SaveLeft_Save_Id0()
+        {
+            var _diffService = this.services.GetService<IDiffService>();
+            Exception expectedException = null;
+            try
+            {
+                
+                _diffService.SaveRight(new paybyrd.Entities.Request.DiffRequest() { Id = 0, JsonValue = "VEVTVEUgREUgUEFMQVZSQQ==" });
+            }
+            catch (Exception e)
+            {
+                expectedException = e;
+            }
+            Assert.NotNull(expectedException);
+        }
+        [Fact]
+        public void SaveLeft_Save_JsonValurEmpty()
+        {
+            var _diffService = this.services.GetService<IDiffService>();
+            Exception expectedException = null;
+            try
+            {
+
+                _diffService.SaveRight(new paybyrd.Entities.Request.DiffRequest() { Id = 0, JsonValue = "" });
+            }
+            catch (Exception e)
+            {
+                expectedException = e;
+            }
+            Assert.NotNull(expectedException);
+        }
 
     }
 }

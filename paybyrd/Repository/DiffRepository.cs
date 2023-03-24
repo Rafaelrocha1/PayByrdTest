@@ -35,7 +35,7 @@ namespace paybyrd.Interfaces.Repository
             }
             catch (Exception e)
             {
-                throw;
+                throw new Exception("Erro ao salvar valor a ser comparada a esquerda.");
             }
           
         }

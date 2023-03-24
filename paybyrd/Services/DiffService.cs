@@ -28,6 +28,7 @@ namespace paybyrd.Services
         { 
             try
             {
+                validationSave(diffRequest);
                 var diff =_mapper.Map<Diff>(diffRequest);
                 diff.TypeDiff = Entities.Enum.TypeDiff.Left;
                 var diffReturn = _diffRepository.Save(diff);
@@ -37,7 +38,7 @@ namespace paybyrd.Services
             catch ( Exception e)
             {
 
-                throw new Exception("Erro ao salvar valor a ser comparada a esquerda.");
+                throw;
             }
            
         }
@@ -46,6 +47,7 @@ namespace paybyrd.Services
         {
             try
             {
+                validationSave(diffRequest);
                 var diff = _mapper.Map<Diff>(diffRequest);
                 diff.TypeDiff = Entities.Enum.TypeDiff.Right;
                 var diffReturn = _diffRepository.Save(diff);
@@ -67,7 +69,7 @@ namespace paybyrd.Services
                 var diffReturnLeft = _diffRepository.GetById(Id, TypeDiff.Left);
                 var diffReturnRight = _diffRepository.GetById(Id, TypeDiff.Right);
 
-                Validation(diffReturnLeft, diffReturnRight, out DiffDifferencesResponse diffDifferencesResponse);
+                ValidationDiff(diffReturnLeft, diffReturnRight, out DiffDifferencesResponse diffDifferencesResponse);
 
                 if (diffDifferencesResponse.Equals == false)
                     return diffDifferencesResponse;
@@ -138,7 +140,7 @@ namespace paybyrd.Services
             diffDifferencesResponse.Differences = differences;
             return diffDifferencesResponse;
         }
-        private bool Validation(Diff Left, Diff Right, out DiffDifferencesResponse diffDifferencesResponse)
+        private bool ValidationDiff(Diff Left, Diff Right, out DiffDifferencesResponse diffDifferencesResponse)
         {
             try
             {
@@ -166,6 +168,14 @@ namespace paybyrd.Services
                 throw;
             }
             return true;
+        }
+
+        private void validationSave(DiffRequest diff)
+        {
+            if(diff.Id <= 0)
+                throw new Exception("Id necessita ser maior que 0.");
+            if (string.IsNullOrEmpty(diff.JsonValue))
+                throw new Exception("JsonValue necessita de um valor.");
         }
     }
 }
